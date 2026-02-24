@@ -1,133 +1,96 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
-func menuChoice() {
-    print("""
-    __________________________
-
-    1. Add eggs
-    2. Sell eggs
-    3. Show current stock
-    4. Show total eggs sold
-    5. Exit
-    Choose an option:
-    __________________________
-    """)
+func print(board: [[String]]) {
+    print("+---+---+---+")
+board.forEach { line in
+    print("| \(line[0]) | \(line[1]) | \(line[2]) |")
+    print("+---+---+---+")
 }
-/// Adds Eggs into the inventory.
-/// - Parameter currentStock: The number of eggs currently in the inventory.
-/// - Returns: The number of eggs in inventory after adding more eggs.
-func addEggs(currentStock: Int) -> Int {  
-    let minAmount = 0
-    let maxAmount = 1000
-    print("How many eggs do you want to add? (Enter a number 1 - 1000 inclusive.)")
-    if let input = readLine(), let amount = Int(input), amount >= minAmount, amount <= maxAmount {
-    let newStockTotal = currentStock + amount
-    print("Your current stock is now \(newStockTotal) eggs")
-    return newStockTotal
-    } else {
-        print("Invalid input, please try again. (Enter a number 1 - 1000 inclusive.)")
-        return currentStock
+print("")
+}
+func askPlayerMove(board: [[String]]) -> [Int] {
+    while true{
+    print(" Please enter the row number (1, 2, or 3): ")
+    let userInput = readLine()!
+    let rowNumber = Int(userInput)! - 1
+
+    print("Please enter the column number (1, 2, or 3): ")
+    let userInput2 = readLine()!
+    let columnNumber = Int(userInput2)! - 1
+
+    if board[rowNumber][columnNumber] == "." {
+        return [rowNumber, columnNumber]
+    }
     }
 }
-/// Sells eggs and removes it from the inventory
-/// - Parameter currentStock: The number of eggs currently in the inventory.
-/// - Returns: The number of eggs in the inventory after selling some.
-func sellEggs(currentStock: Int) -> Int {
-        let minAmount = 1
-        let maxAmount = currentStock
-        print("How many eggs do you want to sell? (Enter a number 1 - \(currentStock) inclusive.)")
-        if let input = readLine(), let amount = Int(input), amount >= minAmount, amount <= maxAmount {
-        let newStockTotal = currentStock - amount
-        print("Your current stock is now \(newStockTotal) eggs")
-        return newStockTotal
-        } else {
-            print("Invalid input, please try again. (Enter a number 1 - 1000 inclusive.)")
-            return currentStock
-        }
-}
-/// Shows current stock
-/// - Parameter currentStock: The number of eggs currently in the inventory.
-/// - Returns: The current stock.
-func showCurrentStock(stock: Int) {
-    print("You have \(stock) eggs in total.")
-}
-/// Sums up total sales
-/// - Parameter currentSold: The number of eggs currently sold.
-/// - Returns: The number of eggs sold.
-func totalSales(currentSold: Int) {
-    print("You have sold \(currentSold) eggs in total.")
-}
-/// Ends program
-/// - Returns: Goodbye message.
-func exitProgram() {
-    print("Thank you for using the Egg Shop App")
-}
-
 
 @main 
 struct SwiftPlayground {
-    static func main() {
-    var currentStock = 0
-    var eggsSold = 0
-    var appIsRunning = true
+        static func main() {
 
-// Lists the menu options and their corresponding number in a variable.
-    let optionOne = 1
-    let optionTwo = 2
-    let optionThree = 3
-    let optionFour = 4
-    let optionFive = 5
+            var totalMoves = 0
+            let maxTotalMoves = 9
 
-    // Prints a welcome message for the users.
-    print("Welcome to the Egg shop App.")
-        while appIsRunning == true {
-            menuChoice()
-            if let input = readLine(), let menuNumber = Int(input), menuNumber >= 1, menuNumber <= 5 {
-                // Runs when the user choses number one on the menu.
-                if menuNumber == optionOne {
+            var board = [
+                [".", ".", "."], // Row 0.
+                [".", ".", "."], // Row 1.
+                [".", ".", "."] // Row 2.
+            ]
+            print(board: board)
 
-                    // Allows the user to add eggs to their inventory. Tells the user their new 'current stock'.
-                    currentStock = addEggs(currentStock: currentStock )
-                
-                // Runs when the user choses number two on the menu.
-                } else if menuNumber == optionTwo {
+        while totalMoves < maxTotalMoves {
+            // Ask for the user's move.
+            if totalMoves % 2 != 0 {
+                let position = askPlayerMove(board: board)
+                board[position[0]][position [1]] = "x"
+                print(board: board)
+                totalMoves += 1
+            } else if totalMoves % 2 == 0 {
+                let position = askPlayerMove(board: board)
+            board[position[0]][position [1]] = "o"
+            print(board: board)
+            totalMoves += 1
+            } else if totalMoves == maxTotalMoves {
+                print("Game over.")
+            } 
 
-                    // Allows the user to sell eggs. Tells the user their new 'current stock'
-                    eggsSold = sellEggs(currentStock: currentStock)
-
-                // Runs when the user choses number three on the menu.
-                } else if menuNumber == optionThree {
-
-                    // Lets the user see their current stock.
-                    showCurrentStock(stock: currentStock)
-
-                // Runs when the user choses number four on the menu.
-                } else if menuNumber == optionFour {
-
-                    // Shows the user how many eggs they sold.
-                    totalSales(currentSold: eggsSold)
-
-                // Runs when the user choses number five on the menu.
-                } else if menuNumber == optionFive {
-                    // Gives the user a summary of their egg transactions.
-                    print("""
-                    You sold \(eggsSold) eggs
-                    Your current stock is \(currentStock)
-                    """)
-
-                    // Thanks the user for using the app.
-                    exitProgram()
-
-                    // Stops running the app.
-                    appIsRunning = false
-                }
-
-                // Runs if the user enters an incorrect menu number.
-                } else {
-
-                    // Error message for the user.
-                    print("Invalid input, enter a number between 1 and 5 inclusive.")
-                } 
+            
         }
-    }
-} 
+
+            // // First Move : o in the middle.
+            // board[1][1] = "o"
+            // print(board: board)
+
+            // // Second Move : x in top-left.
+            // board[0][0] = "x"
+            // print(board: board)
+
+            // // Third Move: o in top-right.
+            // board[0][2] = "o"
+            // print(board: board)
+
+            // // Fourth Move : x in bottom left.
+            // board[2][0] = "x"
+            // print(board: board)
+
+            // // Fifth Move: o in middle left.
+            // board[1][0] = "o"
+            // print(board: board)
+
+            // // Sixth Move: x in middle right.
+            // board[1][2] = "x"
+            // print(board: board)
+
+            // // Seventh Move : o in bottom middle.
+            // board[2][1] = "o"
+            // print(board: board)
+
+            // // Eighth Move : x in bottom right.
+            // board[2][2] = "x"
+            // print(board: board)
+
+            // // Ninth Move : o in top middle.
+            // board[0][1] = "o"
+            // print(board: board)
+        }
+}
