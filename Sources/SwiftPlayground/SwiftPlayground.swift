@@ -8,21 +8,49 @@ board.forEach { line in
 }
 print("")
 }
-func askPlayerMove(board: [[String]]) -> [Int] {
-    while true{
-    print(" Please enter the row number (1, 2, or 3): ")
-    let userInput = readLine()!
-    let rowNumber = Int(userInput)! - 1
-
-    print("Please enter the column number (1, 2, or 3): ")
-    let userInput2 = readLine()!
-    let columnNumber = Int(userInput2)! - 1
-
-    if board[rowNumber][columnNumber] == "." {
-        return [rowNumber, columnNumber]
-    }
-    }
+func printLine() {
+    print("------------------------------------")
 }
+func askPlayerMove(board: [[String]]) -> [Int] {
+    var rowInput = 4
+    var columnInput = 4
+    var validMove = false
+
+    while validMove == false {
+    while rowInput == 4 {
+    print(" Please enter the row number (1, 2, or 3): ")
+    if let userInput = readLine(), let input = Int(userInput), input >= 1, input <= 3 {
+    let rowNumber = input - 1
+    rowInput = rowNumber 
+    } else {
+        print("Invalid row Number, choose a number 1 - 3 inclusive.")
+        printLine()
+        rowInput = 4
+    }}
+
+
+    while columnInput == 4 {
+    print("Please enter the column number (1, 2, or 3): ")
+    if let userInput2 = readLine(), let input = Int(userInput2), input >= 1, input <= 3 {
+        let columnNumber = input - 1
+            columnInput = columnNumber
+    } else {
+        print("Invalid row Number, choose a number 1 - 3 inclusive.")
+        printLine()
+    }
+
+
+    }
+
+    if board[rowInput][columnInput] != "." {
+        validMove = true
+    } else {
+        print("This square has already been taken. Please try another one.")
+        printLine()
+        }
+        
+    return [rowInput, columnInput]
+}}
 
 @main 
 struct SwiftPlayground {
