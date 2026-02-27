@@ -28,7 +28,7 @@ func addEggs(currentStock: Int) -> Int {
     print("Your current stock is now \(newStockTotal) eggs")
     return newStockTotal
     } else {
-        print("Invalid input, please try again. (Enter a number 1 - 1000 inclusive.)")
+        print("Invalid input, please try again.")
         return currentStock
     }
 }
@@ -38,15 +38,35 @@ func addEggs(currentStock: Int) -> Int {
 func sellEggs(currentStock: Int) -> Int {
         let minAmount = 1
         let maxAmount = currentStock
-        print("How many eggs do you want to sell? (Enter a number 1 - \(currentStock) inclusive.)")
-        if let input = readLine(), let amount = Int(input), amount >= minAmount, amount <= maxAmount {
-        let newStockTotal = currentStock - amount
-        print("Your current stock is now \(newStockTotal) eggs")
-        return newStockTotal
-        } else {
-            print("Invalid input, please try again. (Enter a number 1 - 1000 inclusive.)")
+        if currentStock > minAmount {
+                    print("How many eggs do you want to sell?")
+            print("(Enter a number 1 - \(currentStock) inclusive.)")
+            if let input = readLine(), let amount = Int(input), amount >= minAmount, amount <= maxAmount {
+            let newStockTotal = currentStock - amount
+            print("Your current stock is now \(newStockTotal) eggs")
+            return newStockTotal
+            } else {
+            print("Invalid input, please try again.")
             return currentStock
         }
+    } else if currentStock == minAmount {
+        print("You only have one egg, press '1' to sell it, press '2' to go back to the menu.")
+        if let input = readLine(), let userInput = Int(input), userInput >= 1, userInput <= 2 {
+            if userInput == 1 {
+                let newStockTotal = 0
+                return newStockTotal
+            } else if userInput == 2 {
+                return currentStock
+            } else {
+                print("Invalid input, please try again.")
+                return currentStock
+            }
+        }
+    } else if currentStock < minAmount {
+        print("You do not have any eggs left. Please add more eggs.")
+        return currentStock
+    }
+return currentStock
 }
 /// Shows current stock
 /// - Parameter currentStock: The number of eggs currently in the inventory.
