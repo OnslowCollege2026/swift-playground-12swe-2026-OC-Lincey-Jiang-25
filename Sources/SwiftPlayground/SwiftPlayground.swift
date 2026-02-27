@@ -1,5 +1,8 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
+
+/// Prints the menuchoice.
+/// Returns the options they can choose from.
 func menuChoice() {
     print("""
     __________________________
@@ -67,47 +70,46 @@ func exitProgram() {
 @main 
 struct SwiftPlayground {
     static func main() {
-    var currentStock = 0
-    var eggsSold = 0
-    var appIsRunning = true
 
-// Lists the menu options and their corresponding number in a variable.
-    let optionOne = 1
-    let optionTwo = 2
-    let optionThree = 3
-    let optionFour = 4
-    let optionFive = 5
+        // Sets the shop details.
+        var currentStock = 0
+        var eggsSold = 0
+        var appIsRunning = true
 
-    // Prints a welcome message for the users.
-    print("Welcome to the Egg shop App.")
+    // Lists the menu options and their corresponding number in a variable.
+        let optionOne = 1
+        let optionTwo = 2
+        let optionThree = 3
+        let optionFour = 4
+        let optionFive = 5
+
+        print("Welcome to the Egg shop App.")
+
+        // Carries out the user's menu choice until they decide to stop the app. 
         while appIsRunning == true {
             menuChoice()
             if let input = readLine(), let menuNumber = Int(input), menuNumber >= 1, menuNumber <= 5 {
-                // Runs when the user choses number one on the menu.
+
                 if menuNumber == optionOne {
 
                     // Allows the user to add eggs to their inventory. Tells the user their new 'current stock'.
                     currentStock = addEggs(currentStock: currentStock )
-                
-                // Runs when the user choses number two on the menu.
+
                 } else if menuNumber == optionTwo {
 
                     // Allows the user to sell eggs. Tells the user their new 'current stock'
                     eggsSold = sellEggs(currentStock: currentStock)
 
-                // Runs when the user choses number three on the menu.
                 } else if menuNumber == optionThree {
 
                     // Lets the user see their current stock.
                     showCurrentStock(stock: currentStock)
 
-                // Runs when the user choses number four on the menu.
                 } else if menuNumber == optionFour {
 
                     // Shows the user how many eggs they sold.
                     totalSales(currentSold: eggsSold)
 
-                // Runs when the user choses number five on the menu.
                 } else if menuNumber == optionFive {
                     // Gives the user a summary of their egg transactions.
                     print("""
@@ -122,12 +124,12 @@ struct SwiftPlayground {
                     appIsRunning = false
                 }
 
-                // Runs if the user enters an incorrect menu number.
-                } else {
+            // Runs if the user enters an incorrect menu number.
+            } else {
 
-                    // Error message for the user.
-                    print("Invalid input, enter a number between 1 and 5 inclusive.")
-                } 
+                // Error message for the user.
+                print("Invalid input, enter a number between 1 and 5 inclusive.")
+            } 
         }
     }
 } 
