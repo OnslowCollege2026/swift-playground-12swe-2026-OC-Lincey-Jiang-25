@@ -1,124 +1,82 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
-func print(board: [[String]]) {
-    print("+---+---+---+")
-board.forEach { line in
-    print("| \(line[0]) | \(line[1]) | \(line[2]) |")
-    print("+---+---+---+")
-}
-print("")
-}
-func printLine() {
-    print("------------------------------------")
-}
-func askPlayerMove(board: [[String]]) -> [Int] {
-    var rowInput = 4
-    var columnInput = 4
-    var validMove = false
 
-    while validMove == false {
-    while rowInput == 4 {
-    print(" Please enter the row number (1, 2, or 3): ")
-    if let userInput = readLine(), let input = Int(userInput), input >= 1, input <= 3 {
-    let rowNumber = input - 1
-    rowInput = rowNumber 
-    } else {
-        print("Invalid row Number, choose a number 1 - 3 inclusive.")
-        printLine()
-        rowInput = 4
-    }}
+/// Calculates the total of chosen column.
+/// - Parameter table: numbers in 2D arrays.
+/// Returns the total of the chosen column.
+func columnTotal(in table: [[Int]]) {
+    var running = true
 
+    while running == true {
+        print("Which column do you want to total? (1 - 5 inclusive)")
+        print("Press '5' to exit program")
+        if let input = readLine(), let answer = Int(input), answer <= 5, answer >= 1 {
 
-    while columnInput == 4 {
-    print("Please enter the column number (1, 2, or 3): ")
-    if let userInput2 = readLine(), let input = Int(userInput2), input >= 1, input <= 3 {
-        let columnNumber = input - 1
-            columnInput = columnNumber
-    } else {
-        print("Invalid row Number, choose a number 1 - 3 inclusive.")
-        printLine()
-    }
+            var sum = 0
 
+            // Calculates the column total.
+            for row in table {
+                if row.count >= answer {
+                    sum += row[answer - 1]
+                } 
+            }
+            print(sum)
+            
+            // Returns the sum to 0 for further calculations.
+            sum = 0
 
-    }
-
-    if board[rowInput][columnInput] != "." {
-        validMove = true
-    } else {
-        print("This square has already been taken. Please try another one.")
-        printLine()
+            // Ends the program.    
+            if answer == 5 {
+                running = false
+                print("Thank you for using the totalling program.")
+            }
         }
-        
-    return [rowInput, columnInput]
-}}
+    }
+}
 
 @main 
 struct SwiftPlayground {
-        static func main() {
+    static func main() {
 
-            var totalMoves = 0
-            let maxTotalMoves = 9
+        // Task A.
+        let tempuratures: [[Int]] = [
+            [0, 3, 6, 9],
+            [12, 15, 18, 21],
+            [24, 27, 30, 33]
+        ]
+        print(tempuratures[0]) // Prints entire first row.
+        print(tempuratures[1][2]) // The value in row 2, column 3.
+        print(tempuratures[2][0]) // The value in row 3, column 1.
+        print(tempuratures[1].reduce(0, +) / tempuratures[1].count ) // The average temperature of row 2 (Int).
 
-            var board = [
-                [".", ".", "."], // Row 0.
-                [".", ".", "."], // Row 1.
-                [".", ".", "."] // Row 2.
-            ]
-            print(board: board)
+        print("......................................")
 
-        while totalMoves < maxTotalMoves {
-            // Ask for the user's move.
-            if totalMoves % 2 != 0 {
-                let position = askPlayerMove(board: board)
-                board[position[0]][position [1]] = "x"
-                print(board: board)
-                totalMoves += 1
-            } else if totalMoves % 2 == 0 {
-                let position = askPlayerMove(board: board)
-            board[position[0]][position [1]] = "o"
-            print(board: board)
-            totalMoves += 1
-            } else if totalMoves == maxTotalMoves {
-                print("Game over.")
-            } 
+        // Task B.
+        let table = [
+        [2, 4, 6],
+        [8, 10, 12],
+        [14, 16, 18]
+        ]
 
-            
+        var count = 0
+        for row in table {
+            for value in row {
+                print(value)
+                count += 1
+            }
         }
+        print(count)
 
-            // // First Move : o in the middle.
-            // board[1][1] = "o"
-            // print(board: board)
+        print("......................................")
 
-            // // Second Move : x in top-left.
-            // board[0][0] = "x"
-            // print(board: board)
+        // Task C.
+        let unevenTable = [
+            [3, 5, 7, 9],
+            [2, 4],
+            [8, 6, 1],
+            [10]
+        ]        
 
-            // // Third Move: o in top-right.
-            // board[0][2] = "o"
-            // print(board: board)
-
-            // // Fourth Move : x in bottom left.
-            // board[2][0] = "x"
-            // print(board: board)
-
-            // // Fifth Move: o in middle left.
-            // board[1][0] = "o"
-            // print(board: board)
-
-            // // Sixth Move: x in middle right.
-            // board[1][2] = "x"
-            // print(board: board)
-
-            // // Seventh Move : o in bottom middle.
-            // board[2][1] = "o"
-            // print(board: board)
-
-            // // Eighth Move : x in bottom right.
-            // board[2][2] = "x"
-            // print(board: board)
-
-            // // Ninth Move : o in top middle.
-            // board[0][1] = "o"
-            // print(board: board)
-        }
+        columnTotal(in:unevenTable)
+    }
 }
