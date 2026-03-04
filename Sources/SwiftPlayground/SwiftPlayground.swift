@@ -9,20 +9,37 @@ board.forEach { line in
 print("")
 }
 func askPlayerMove(board: [[String]]) -> [Int] {
-    while true{
+    let input = false
+
+    while input == false {
     print(" Please enter the row number (1, 2, or 3): ")
-    let userInput = readLine()!
-    let rowNumber = Int(userInput)! - 1
+    if let userInput = readLine(), let number = Int(userInput), number >= 1, number <= 3 {
+        let rowNumber = number - 1
 
-    print("Please enter the column number (1, 2, or 3): ")
-    let userInput2 = readLine()!
-    let columnNumber = Int(userInput2)! - 1
+        print("Please enter the column number (1, 2, or 3): ")
+        if let userInput2 = readLine(), let number = Int(userInput2), number >= 1, number <= 3 {
+        let columnNumber = number - 1
 
-    if board[rowNumber][columnNumber] == "." {
-        return [rowNumber, columnNumber]
+            if board[rowNumber][columnNumber] == " " {
+                return [rowNumber, columnNumber]
+            } else {
+                print("This spot is already taken. Please try again.")
+            }
+                
+        } else {
+            print ("Invalid column number")
+        }
+    } else {
+        print("Invalid row number.")
     }
+
     }
+} 
+
+func winGame() {
+    
 }
+
 
 @main 
 struct SwiftPlayground {
@@ -30,67 +47,38 @@ struct SwiftPlayground {
 
             var totalMoves = 0
             let maxTotalMoves = 9
+            var player = 1
 
             var board = [
-                [".", ".", "."], // Row 0.
-                [".", ".", "."], // Row 1.
-                [".", ".", "."] // Row 2.
+                [" ", " ", " "], // Row 0.
+                [" ", " ", " "], // Row 1.
+                [" ", " ", " "] // Row 2.
             ]
             print(board: board)
 
         while totalMoves < maxTotalMoves {
             // Ask for the user's move.
-            if totalMoves % 2 != 0 {
+            if player == 1 {
                 let position = askPlayerMove(board: board)
                 board[position[0]][position [1]] = "x"
                 print(board: board)
                 totalMoves += 1
-            } else if totalMoves % 2 == 0 {
+                player = 2
+            } 
+
+            if player == 2 {
                 let position = askPlayerMove(board: board)
             board[position[0]][position [1]] = "o"
             print(board: board)
             totalMoves += 1
-            } else if totalMoves == maxTotalMoves {
+            player = 1
+            } 
+            
+            if totalMoves == maxTotalMoves {
                 print("Game over.")
             } 
 
             
         }
-
-            // // First Move : o in the middle.
-            // board[1][1] = "o"
-            // print(board: board)
-
-            // // Second Move : x in top-left.
-            // board[0][0] = "x"
-            // print(board: board)
-
-            // // Third Move: o in top-right.
-            // board[0][2] = "o"
-            // print(board: board)
-
-            // // Fourth Move : x in bottom left.
-            // board[2][0] = "x"
-            // print(board: board)
-
-            // // Fifth Move: o in middle left.
-            // board[1][0] = "o"
-            // print(board: board)
-
-            // // Sixth Move: x in middle right.
-            // board[1][2] = "x"
-            // print(board: board)
-
-            // // Seventh Move : o in bottom middle.
-            // board[2][1] = "o"
-            // print(board: board)
-
-            // // Eighth Move : x in bottom right.
-            // board[2][2] = "x"
-            // print(board: board)
-
-            // // Ninth Move : o in top middle.
-            // board[0][1] = "o"
-            // print(board: board)
-        }
+    }
 }
