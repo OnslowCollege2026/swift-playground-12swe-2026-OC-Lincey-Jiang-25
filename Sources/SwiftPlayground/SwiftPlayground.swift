@@ -83,11 +83,15 @@ func winGame(board2: [[Int]]) -> Bool {
 
     if row1Sum == 3 || row2Sum == 3 || row3Sum == 3 || column1Sum == 3 || column2Sum == 3 || column3Sum == 3 || diagonal1Sum == 3 || diagonal2Sum == 3 {
         print("Player 1 (x) wins!")
+        print(" ")
+        lineBreak()
         return true
     }
 
     if row1Sum == 12 || row2Sum == 12 || row3Sum == 12 || column1Sum == 12 || column2Sum == 12 || column3Sum == 12 || diagonal1Sum == 12 || diagonal2Sum == 12 {
         print("Player 2 (o) wins!")
+        print(" ")
+        lineBreak()
         return true
     }
     return false
@@ -148,5 +152,7 @@ struct SwiftPlayground {
             }
         } 
             print("Game over. You tied.")
+            print (" ")
+            lineBreak()
         }
         } 
