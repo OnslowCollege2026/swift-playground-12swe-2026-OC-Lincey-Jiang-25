@@ -20,12 +20,12 @@ func menuChoice() {
 /// - Parameter currentStock: The number of eggs currently in the inventory.
 /// - Returns: The number of eggs in inventory after adding more eggs.
 func addEggs(currentStock: Int) -> Int {  
-    let minAmount = 0
+    let minAmount = 1
     let maxAmount = 1000
     print("How many eggs do you want to add? (Enter a number 1 - 1000 inclusive.)")
     if let input = readLine(), let amount = Int(input), amount >= minAmount, amount <= maxAmount {
     let newStockTotal = currentStock + amount
-    print("Your current stock is now \(newStockTotal) eggs")
+    showCurrentStock(stock: newStockTotal)
     return newStockTotal
     } else {
         print("Invalid input, please try again.")
@@ -42,9 +42,11 @@ func sellEggs(currentStock: Int) -> Int {
                     print("How many eggs do you want to sell?")
             print("(Enter a number 1 - \(currentStock) inclusive.)")
             if let input = readLine(), let amount = Int(input), amount >= minAmount, amount <= maxAmount {
-            let newStockTotal = currentStock - amount
-            print("Your current stock is now \(newStockTotal) eggs")
-            return newStockTotal
+                let eggsSold = amount
+                print("You have sold \(eggsSold) eggs")    
+                let newStockTotal = currentStock - amount
+                showCurrentStock(stock: newStockTotal)
+                return newStockTotal
             } else {
             print("Invalid input, please try again.")
             return currentStock
@@ -93,6 +95,7 @@ struct SwiftPlayground {
 
         // Sets the shop details.
         var currentStock = 0
+        var oldStock = 0
         var eggsSold = 0
         var appIsRunning = true
 
@@ -118,7 +121,8 @@ struct SwiftPlayground {
                 } else if menuNumber == optionTwo {
 
                     // Allows the user to sell eggs. Tells the user their new 'current stock'
-                    eggsSold = sellEggs(currentStock: currentStock)
+                    currentStock = sellEggs(currentStock: currentStock)
+                    eggsSold = currentStock - oldStock + eggsSold
 
                 } else if menuNumber == optionThree {
 
@@ -144,6 +148,7 @@ struct SwiftPlayground {
                     appIsRunning = false
                 }
 
+                oldStock = |currentStock|
             // Runs if the user enters an incorrect menu number.
             } else {
 
