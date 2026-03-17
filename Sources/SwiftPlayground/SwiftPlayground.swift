@@ -21,13 +21,19 @@ func lineBreak() {
 /// Creates the battle ship board.
 /// - Parameter board: 2D array with String values.
 func print(board: [[String]]) {
-    // let yAxis = ["A", "B", "C", "D", "E", "F"]
-    print("+----+----+----+----+----+----+")
-for row in board {
+    let yAxis = ["1", "2", "3", "4", "5", "6"]
+    print("   ", yAxis[0], "   ", yAxis[1],"   ", yAxis[2],"   ", yAxis[3],"   ", yAxis[4],"   ", yAxis[5])
+    print("  +----+----+----+----+----+----+")
 
-    print("|  \(row[0]) |  \(row[1]) |  \(row[2]) |  \(row[3]) |  \(row[4]) |  \(row[5]) |")
-    print("+----+----+----+----+----+----+")
-}
+    var index = 0
+    while index < 5 {
+        for row in board {
+    print("\(yAxis[index]) |  \(row[0]) |  \(row[1]) |  \(row[2]) |  \(row[3]) |  \(row[4]) |  \(row[5]) |")
+    print("  +----+----+----+----+----+----+")
+    index += 1
+        }
+    }
+
 
 lineBreak()
 print("")
@@ -39,27 +45,32 @@ print("")
 /// - guesses: The player's current guesses grid.
 ///
 /// Returns: The updated guesses grid after the guess is applied.
-func processGuess(row: Int, col: Int, ocean: [[String]], guesses: [[String]]) -> [[String]] {
+func processGuess(ocean: [[String]], ) -> [[String]] {
     let maxNumber = 6
     let minNumber = 1
         while true {
-        print("What co-ordinate do you want to guess?")
-        if let input = readLine(), let yCoordinate = Int(input), yCoordinate <= maxNumber, yCoordinate >= minNumber {
-            let rowNumber = yCoordinate - 1
+        print("Please enter the x-coordinate. (1 - 6)")
+            if let input = readLine(), let xCoordinate = Int(input), xCoordinate <= maxNumber, xCoordinate >= minNumber {
+                let rowNumber = xCoordinate - 1
+            print("Please enter your y-coodinate. (1 - 6)")
+            if let input = readLine(), let yCoordinate = Int(input), yCoordinate <= maxNumber, yCoordinate >= minNumber {
+                let columnNumber = yCoordinate - 1
 
-            if let userInput = readLine(), let xCoordinate = Int(userInput), xCoordinate >= 1, xCoordinate <= 3 {
-                let columnNumber = xCoordinate - 1
-
-                if ocean[rowNumber][columnNumber] == "~" {
-                return[["O"]]
-                } else if ocean[rowNumber][columnNumber] == "S" {
-                    return[["O"]]
-                } else {
-                    print("This spot has already been guessed.")
+            let guess = ocean[rowNumber][columnNumber]
+                if guess == "~" {
+                    print("You missed!")
+                    return [["O"]]
+                } else if guess == "S" {
+                    print("You hit a ship!")
+                    return [["X"]]
+                } else if guess == "X" || guess == "O" {
+                    print("This spot has already been guessed. try again.")
                 }
-    }
-}
-    }}
+            }
+        }
+        }
+    } 
+
 
 
 
@@ -136,7 +147,7 @@ func processGuess(row: Int, col: Int, ocean: [[String]], guesses: [[String]]) ->
 struct SwiftPlayground {
         static func main() {
 
-            // Playing board.
+            // Guessing board.
             let board = [
                 [" ", " ", " ", " ", " ", " "], // Row 0.
                 [" ", " ", " ", " ", " ", " "], // Row 1.
@@ -148,12 +159,15 @@ struct SwiftPlayground {
 
             let size = 6
             var ocean = Array(repeating: Array(repeating: "~", count: size), count: size)
-            var guesses = Array(repeating: Array(repeating: "~", count: size), count: size)
+            // var guesses = Array(repeating: Array(repeating: "~", count: size), count: size)
             ocean[1][3] = "S"
             ocean[2][3] = "S"
             ocean[4][0] = "S"
             ocean[5][4] = "S"
 
+            print(board: board)
+            print(board: ocean)
+            processGuess(ocean: board)
             print(board: board)
 //             // Sets up calculation board.
 //             var board2 = [
