@@ -22,7 +22,7 @@ func lineBreak() {
 /// - Parameter board: 2D array with String values.
 func print(board: [[String]]) {
     let yAxis = ["1", "2", "3", "4", "5", "6"]
-    print("   ", yAxis[0], "   ", yAxis[1],"   ", yAxis[2],"   ", yAxis[3],"   ", yAxis[4],"   ", yAxis[5])
+    print("   ", yAxis[0], "  ", yAxis[1],"  ", yAxis[2],"  ", yAxis[3],"  ", yAxis[4],"   ", yAxis[5])
     print("  +----+----+----+----+----+----+")
 
     var index = 0
@@ -45,31 +45,38 @@ print("")
 /// - guesses: The player's current guesses grid.
 ///
 /// Returns: The updated guesses grid after the guess is applied.
-func processGuess(ocean: [[String]], ) -> [[String]] {
+func processGuess( ocean: [[String]], ) -> [[String]] {
     let maxNumber = 6
     let minNumber = 1
-        while true {
-        print("Please enter the x-coordinate. (1 - 6)")
-            if let input = readLine(), let xCoordinate = Int(input), xCoordinate <= maxNumber, xCoordinate >= minNumber {
-                let rowNumber = xCoordinate - 1
-            print("Please enter your y-coodinate. (1 - 6)")
-            if let input = readLine(), let yCoordinate = Int(input), yCoordinate <= maxNumber, yCoordinate >= minNumber {
-                let columnNumber = yCoordinate - 1
-
-            let guess = ocean[rowNumber][columnNumber]
-                if guess == "~" {
-                    print("You missed!")
-                    return [["O"]]
-                } else if guess == "S" {
-                    print("You hit a ship!")
-                    return [["X"]]
-                } else if guess == "X" || guess == "O" {
-                    print("This spot has already been guessed. try again.")
-                }
-            }
-        }
-        }
+    let maximumGuesses = 5
+    var guessCount = 1
+    while guessCount <= maximumGuesses {
+    print("Please enter the x-coordinate, press enter, then enter your y-coordinate. (1 - 6)")
+    guard let input = readLine(), 
+    let xCoordinate = Int(input), xCoordinate <= maxNumber, xCoordinate >= minNumber,
+    let input2 = readLine(),
+    let yCoordinate = Int(input2), yCoordinate <= maxNumber, yCoordinate >= minNumber else {
+        print("invalid input")
+        guessCount = guessCount - 1
+        continue
     } 
+        let guess = ocean[xCoordinate][yCoordinate]
+
+        // Makes sure the user hasn't guessed this position already
+        guard guess != "X" || guess != "0" else {
+            print("You have already guessed this spot.")
+            continue
+        }
+        guard guess != "~" else {
+            print("You missed!")
+            continue
+        }
+
+        print("You hit a ship!")
+        return [["X"]]
+    }   
+return [["O"]]
+}
 
 
 
@@ -149,12 +156,12 @@ struct SwiftPlayground {
 
             // Guessing board.
             let board = [
-                [" ", " ", " ", " ", " ", " "], // Row 0.
-                [" ", " ", " ", " ", " ", " "], // Row 1.
-                [" ", " ", " ", " ", " ", " "], // Row 2.
-                [" ", " ", " ", " ", " ", " "], // Row 3.
-                [" ", " ", " ", " ", " ", " "], // Row 4.
-                [" ", " ", " ", " ", " ", " "], // Row 5.
+                ["~", "~", "~", "~", "~", "~"], // Row 0.
+                ["~", "~", "~", "~", "~", "~"], // Row 1.
+                ["~", "~", "~", "~", "~", "~"], // Row 2.
+                ["~", "~", "~", "~", "~", "~"], // Row 3.
+                ["~", "~", "~", "~", "~", "~"], // Row 4.
+                ["~", "~", "~", "~", "~", "~"], // Row 5.
             ]
 
             let size = 6
@@ -167,8 +174,7 @@ struct SwiftPlayground {
 
             print(board: board)
             print(board: ocean)
-            processGuess(ocean: board)
-            print(board: board)
+            print(board: processGuess( ocean: ocean))
 //             // Sets up calculation board.
 //             var board2 = [
 //                 [0, 0, 0], // Row 0.
@@ -211,5 +217,4 @@ struct SwiftPlayground {
 //             print("Game over. You tied.")
 //             print (" ")
 //             lineBreak()
-        }
-        } 
+        }}
