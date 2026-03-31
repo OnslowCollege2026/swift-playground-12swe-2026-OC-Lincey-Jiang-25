@@ -1,73 +1,72 @@
 // The Swift Programming Language
-// https://docs.swift.org/swift-book
+// https://docs.swift.org/swift-book 
+
 
 
 @main
 struct SwiftPlayground {
-    static func main(){
+    static func main() {
         // Constants and variables.
 
         // Each inner array contains the english word, the correct anser, and then 3 incorrect answers
-        let vocabulary = [
+        let vocabulary: [[String]] = [
             ["Hello", "Hallo", "Holla", "Helo", "bonjour"],
-            ["Goodbye", "Auf Wiedersehen", "" ],
+            ["Goodbye", "Auf Wiedersehen", "Hause", "Danke", "vier" ],
             ["Yes", "Ja", "Ya", "Lampe", "Dunkel" ],
             ["No", "Nein", "Nah", "Tag", "Katze"],
             ["Good Evening", "Guten Abend", "Guten Tag", "Guten Morgen", "Hund" ]
         ]
 
-        // The indices of the questions that the user got wrong.
-        var incorrectIndices: [Int] = []
+        var counter = 0
+        var score = 0
+        var incorrectAnswerIndices: [Int] = []
 
-        /// The number of questions that the user got wrong first time around.
-        var incorrectCount = 0
+        while counter < vocabulary.count {
+            let englishWord = vocabulary[counter][0]
+            let correctWord = vocabulary[counter][1]
+            let allAnswers = vocabulary[counter].dropFirst().shuffled()
 
-        // The number of questions that the user got right.
-        var correctIndicies: [Int] = []
-
-        /// The number of questions that the user got right first time around.
-            var count = 0
-
-        // Loop until all of the vocabulary questions have been asked.
-        // while count < vocabulary.count {
-
-        // Show the question.
-        for array in vocabulary {
-            print("What is the correct German word for \(array[0])")
-        
-            // Present the possible answers.
-            let random1 = Int.random(in: 1...4)
-            var random2 = Int.random(in: 1...4)
-            while random2 == random1 {
-                random2 = Int.random(in: 1...4)
+            print("Please translate \(englishWord)")
+            allAnswers.forEach { answer in
+                print("- \(answer)")
             }
-            var random3 = Int.random(in: 1...4)
-            while random3 == random1 || random3 == random2 {
-                random3 = Int.random(in: 1...4)  
+
+            if let userInput = readLine(), userInput.lowercased() == correctWord.lowercased() {
+                score = score + 1
+                print("Yes, \(correctWord) is correct!")
+            } else {
+                incorrectAnswerIndices.append(counter)
+                print("Sorry! The correct answer is \(correctWord)")
             }
-            var random4 = Int.random(in: 1...4)
-            while random4 == random1 || random4 == random2 || random4 == random3 {
-                random4 = Int.random(in: 1...4) 
 
-            print(random1, random2, random3, random4)
+            counter = counter + 1
+        }
 
-            let option1: Int = random1
-            let option2: Int = random2
-            let option3: Int = random3
-            let option4: Int = random4
-            
-                print("""
-                1: \(array[option1])
-                2: \(array[option2])
-                3: \(array[option3])
-                4: \(array[option4])
-                """)
-            // Check if the user guessed the correct answers.
+        if incorrectAnswerIndices.count > 0 {
+            let index = incorrectAnswerIndices[0]
 
-            // If not, make a note of the questions to ask again later.
+            let englishWord = vocabulary[index][0]
+            let correctWord = vocabulary[index][1]
+            let allAnswers = vocabulary[index].dropFirst().shuffled()
 
-            }
+            print("Please translate \(englishWord)")
+            allAnswers.forEach { answer in
+                print("- \(answer)")
+        }
+
+        if let userInput = readLine(), userInput.lowercased() == correctWord.lowercased() {
+                incorrectAnswerIndices.removeFirst()
+                print("Yes, \(correctWord) is correct!")
+            } else {
+                incorrectAnswerIndices.append(counter)
+                print("Sorry! The correct answer is \(correctWord)")
+            }  
+        }
+        print("You have a score of \(score)/\(vocabulary.count)")
+        if Double(score) >= Double(vocabulary.count / 2) {
+            print("congratulations")
+        } else {
+            print("Try again next time")
+        }
     }
-        }  
-
 }
