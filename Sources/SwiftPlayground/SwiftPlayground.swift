@@ -1,12 +1,14 @@
 // // The Swift Programming Language
 // // https://docs.swift.org/swift-book
 
+/// Used to break up sections.
 func lineBreak() {
     print("-------------------------------------------")
 }
 
-/// Lets the owner set up how much kumara is in stock today.
+/// Lets the owner use the menu to check different things..
 func ownerMenu() -> Int {
+    lineBreak()
     print("""
     What would you like to do today? Type in the number and press enter.
 
@@ -17,13 +19,14 @@ func ownerMenu() -> Int {
     5. Close program.
     """)
 
-    guard let answer = readLine(), let option = Int(answer), option >= 1, option <= 5 else {
+    while true {
+    if let answer = readLine(), let option = Int(answer), option >= 1, option <= 5 {
+        return option
+    } else {
         print("Invalid input, please try again.")
-        return 0
-    } 
-    return option
+    }
 }
-
+}
 /// Welcomes and informs the user what is happening.
 func welcome() {
     lineBreak()
@@ -37,38 +40,83 @@ func welcome() {
 
     """)
 }
+func calculateBags(kumaraPurchased: Double) -> Int{
+    let maxBagWeight = 5.0
+    let bagsNeeded = Int(kumaraPurchased / maxBagWeight)
+    return bagsNeeded
+}
+
+/// Allows owner to add Kumara.
+/// - Parameter currentStock: How much kumara is instock currently.
+/// - Returns: The amount of kumara the owner wants to add.
+func addKumara(currentStock: Double) -> Double {
+    let minStock = 0.1
+    let maxStock = 50.0
+    while true {
+    print("How much kumara would you like to add (Between \(minStock)kg - \(maxStock - currentStock)kg)")
+            if let input = readLine(), let amount = Double(input), amount >= minStock, amount <= maxStock - currentStock {
+                print("You have added \(amount)kg of kumara.")
+                return amount
+            } else {
+                print("Invalid input. Enter a value between \(minStock)kg - \(maxStock - currentStock)kg")
+            }
+    }
+} 
+
 
 @main 
 struct SwiftPlayground {
     static func main() {
 
-        // // Sets up the option key values.
-        let option1 = 1
-        let option2 = 2
-        let option3 = 3
-        let option4 = 4
-        let option5 = 5
+        // Sets up shop values.
+        var currentStock = 0.0
+        let previousSales: [Double] = []
+        var totalWeightSold = 0.0
+        var totalBagsUsed = Double(0)
+        let summary = ("The average weight sold per bag is \(totalWeightSold / totalBagsUsed)")
+        let minStock = 0.1
+        let maxStock = 50.0
 
-        // Sets up the program for the day.
-        if ownerMenu() == option1 {
-            print("add kumara")
-        } else if ownerMenu() == option2 {
-            print("view current stock")
-        } else if ownerMenu() == option3 {
-            print("view previous sales")
-        } else if ownerMenu() == option4 {
-            print("view summary")
-        } else if ownerMenu() == option5 {
-            print("close program")
-        }
-        
+        // Sets up the option key values.
+        let option1 = "1"
+        let option2 = "2"
+        let option3 = "3"
+        let option4 = "4"
+        let option5 = "5"
+
         // Greets and reminds the owner how the program runs.
         welcome()
-        
-        let maxStock = 50.0
-        let minStock = 0.1
-        let currentStock = 0.0
+        lineBreak()
+        print("Please set up how much kumara is in stock currently.")
+        let stock = addKumara(currentStock: currentStock)
+        currentStock = stock
 
+        // Sets up the program for the day.
+        let option = String(ownerMenu())
+
+        // Adds kumara to stock.
+        if option == option1 {
+            currentStock += addKumara(currentStock: currentStock)
+            print(currentStock)
+
+            // View current stock.
+        } else if option == option2 {
+            print("view current stock")
+
+            // View previous sales.
+        } else if option == option3 {
+            print("view previous sales")
+
+            // View summary.
+        } else if option == option4 {
+            print("view summary")
+
+            // Close program.
+        } else if option == option5 {
+            print("close program")
+        }
+
+        lineBreak()
         // Customer weighs their kumara (Kg)
         print("Thank you for filling up your bag.")
         print("How much does your bag weigh in Kg?")
