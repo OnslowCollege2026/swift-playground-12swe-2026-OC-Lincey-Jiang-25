@@ -6,16 +6,16 @@ func lineBreak() {
     print("-------------------------------------------")
 }
 
-/// Lets the owner use the menu to check different things..
-func ownerMenu() -> Int {
+/// Lets the owner use the menu to check different things or calculate kumara price for customer.
+func customerMenu() -> Int {
     lineBreak()
     print("""
     What would you like to do today? Type in the number and press enter.
 
-    1. Add kumara (Kg)
-    2. View Current Stock
-    3. View previous sales
-    4. View summary (average weight sold per bag and the average amount earned per bag)
+    1. Customer: Purchase Kumara (calculate cost)
+    2. Owner: View Current Stock
+    3. Owner: View previous sales
+    4. Owner: View summary (average weight sold per bag and the average amount earned per bag)
     5. Close program.
     """)
 
@@ -40,20 +40,24 @@ func welcome() {
 
     """)
 }
-func calculateBags(kumaraPurchased: Double) -> Int{
+func calculateBags(kumaraPurchased: Double) -> Int {
     let maxBagWeight = 5.0
     let bagsNeeded = Int(kumaraPurchased / maxBagWeight)
     return bagsNeeded
 }
-
-/// Allows owner to add Kumara.
+func calculateKumaraCost(kumaraPurchased: Double) -> Double {
+    let costPerKg = 3.0
+    let kumaraCost = Double(kumaraPurchased / costPerKg)
+    return kumaraCost
+}
+/// Allows owner add Kumara to stock.
 /// - Parameter currentStock: How much kumara is instock currently.
 /// - Returns: The amount of kumara the owner wants to add.
-func addKumara(currentStock: Double) -> Double {
+func ownerAddKumara(currentStock: Double) -> Double {
     let minStock = 0.1
     let maxStock = 50.0
     while true {
-    print("How much kumara would you like to add (Between \(minStock)kg - \(maxStock - currentStock)kg)")
+    print("How much kumara do you want to add? (Between \(minStock)kg - \(maxStock - currentStock)kg)")
             if let input = readLine(), let amount = Double(input), amount >= minStock, amount <= maxStock - currentStock {
                 print("You have added \(amount)kg of kumara.")
                 return amount
@@ -62,7 +66,34 @@ func addKumara(currentStock: Double) -> Double {
             }
     }
 } 
-
+/// Allows owner to calculate cost of Kumara in customer bag.
+/// - Parameter currentStock: How much kumara is instock currently.
+/// - Returns: The amount of kumara the customer wants to add.
+func customerAddKumara(currentStock: Double) -> Double {
+    let minStock = 0.1
+    while true {
+    print("How much kumara is in the customer's bag in Kg? (Should be between \(minStock)kg - \(currentStock)kg)")
+            if let input = readLine(), let amount = Double(input), amount >= minStock, amount <= currentStock {
+                print("Customer is purchasing \(amount)kg of kumara.")
+                return amount
+            } else {
+                print("Invalid input. Enter a value between \(minStock)kg - \(currentStock)kg")
+            }
+    }
+} 
+func totalCost(kumaraPurchased: Double, bagsNeeded: Double) -> Double {
+    let costPerBag = 0.2
+    let bagNumber = Double(calculateBags(kumaraPurchased: kumaraPurchased))
+    let kumaraCost = Double(calculateKumaraCost(kumaraPurchased: kumaraPurchased))
+    let bagCost = Double(costPerBag * bagsNeeded)
+    let totalCost = Double(kumaraCost + bagCost)
+    print("Bags needed for this purchase: \(bagNumber)")
+    print("Bag cost: $\(bagCost)")
+    print("Kumara added into bags: \(kumaraPurchased)Kg")
+    print("Kumara cost :$\(kumaraCost)")
+    print("Your total cost: $\(totalCost)")
+    return totalCost
+} 
 
 @main 
 struct SwiftPlayground {
@@ -70,10 +101,10 @@ struct SwiftPlayground {
 
         // Sets up shop values.
         var currentStock = 0.0
-        let previousSales: [Double] = []
+        var previousSales: [Double] = []
         var totalWeightSold = 0.0
         var totalBagsUsed = Double(0)
-        let summary = ("The average weight sold per bag is \(totalWeightSold / totalBagsUsed)")
+        let summary = totalWeightSold / totalBagsUsed
         let minStock = 0.1
         let maxStock = 50.0
 
@@ -87,41 +118,64 @@ struct SwiftPlayground {
         // Greets and reminds the owner how the program runs.
         welcome()
         lineBreak()
-        print("Please set up how much kumara is in stock currently.")
-        let stock = addKumara(currentStock: currentStock)
+        print("Owner: Please set up how much kumara is in stock currently.")
+        let stock = ownerAddKumara(currentStock: currentStock)
         currentStock = stock
+        print("CurrentStock", currentStock)
 
+        // Runs the app until the owner wants to stop.
+        var programRunning = true
+
+        while programRunning == true {
         // Sets up the program for the day.
-        let option = String(ownerMenu())
+        let option = String(customerMenu())
 
-        // Adds kumara to stock.
+        // Customer puchases kumara.
         if option == option1 {
-            currentStock += addKumara(currentStock: currentStock)
-            print(currentStock)
+            let numberAdded = Double(customerAddKumara(currentStock: currentStock))
+            let bagsUsed = Double(calculateBags(kumaraPurchased: numberAdded))
+            totalCost(kumaraPurchased: numberAdded, bagsNeeded: bagsUsed)
+            currentStock -= numberAdded
+            previousSales.append(numberAdded)
+            totalWeightSold += numberAdded
+            totalBagsUsed += bagsUsed
+            lineBreak()
+            print("CurrentStock", currentStock)
+            print("previousSales", previousSales)
+            print("totalwight", totalWeightSold)
+            print("Totalbag", totalBagsUsed)
 
             // View current stock.
         } else if option == option2 {
-            print("view current stock")
+            print("Current Stock: \(currentStock)")
 
             // View previous sales.
         } else if option == option3 {
-            print("view previous sales")
+            print("Previous Sales: \(previousSales)")
+            for sale in previousSales {
+                var saleNumber = 0
+                print("""
+                \(String(saleNumber += 1)). \(sale)Kg
+                """)
+            }
 
             // View summary.
         } else if option == option4 {
-            print("view summary")
+            print("""
+            Today the total bags used were: \(totalBagsUsed)
+            You sold: \(totalWeightSold)kg of Kumara
+            The average cost per bag: \(summary)Kg per bag
+            """)
 
             // Close program.
         } else if option == option5 {
-            print("close program")
+            programRunning = false
+        }
         }
 
+        // Closing message
         lineBreak()
-        // Customer weighs their kumara (Kg)
-        print("Thank you for filling up your bag.")
-        print("How much does your bag weigh in Kg?")
-        if let answer = readLine(), let weight = Double(answer), weight >= 0.1, weight <= currentStock {
-            print("You have put \(weight)kg of kumara in your bag")
-        }
+        print("Thank you for using the Kumara shop. ")
+        
     }
 }
