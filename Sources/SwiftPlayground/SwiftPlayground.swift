@@ -1,6 +1,8 @@
 // // The Swift Programming Language
 // // https://docs.swift.org/swift-book
 
+import Foundation
+
 /// Used to break up sections.
 func lineBreak() {
     print("-------------------------------------------")
@@ -13,14 +15,15 @@ func customerMenu() -> Int {
     What would you like to do today? Type in the number and press enter.
 
     1. Customer: Purchase Kumara (calculate cost)
-    2. Owner: View Current Stock
-    3. Owner: View previous sales
-    4. Owner: View summary (average weight sold per bag and the average amount earned per bag)
-    5. Close program.
+    2. Owner: Add Stock
+    3. Owner: View Current Stock
+    4. Owner: View previous sales
+    5. Owner: View summary (average weight sold per bag and the average amount earned per bag)
+    6. Close program.
     """)
 
     while true {
-    if let answer = readLine(), let option = Int(answer), option >= 1, option <= 5 {
+    if let answer = readLine(), let option = Int(answer), option >= 1, option <= 6 {
         return option
     } else {
         print("Invalid input, please try again.")
@@ -42,14 +45,14 @@ func welcome() {
 }
 func calculateBags(kumaraPurchased: Double) -> Int {
     let maxBagWeight = 5.0
-    let bagsNeeded = Int(kumaraPurchased / maxBagWeight)
+    let bagsNeeded = Int((kumaraPurchased / maxBagWeight).rounded(.awayFromZero))
     return bagsNeeded
 }
 func calculateKumaraCost(kumaraPurchased: Double) -> Double {
     let costPerKg = 3.0
     let kumaraCost = Double(kumaraPurchased / costPerKg)
     return kumaraCost
-}
+} 
 /// Allows owner add Kumara to stock.
 /// - Parameter currentStock: How much kumara is instock currently.
 /// - Returns: The amount of kumara the owner wants to add.
@@ -114,6 +117,7 @@ struct SwiftPlayground {
         let option3 = "3"
         let option4 = "4"
         let option5 = "5"
+        let option6 = "6"
 
         // Greets and reminds the owner how the program runs.
         welcome()
@@ -142,25 +146,39 @@ struct SwiftPlayground {
             lineBreak()
             print("CurrentStock", currentStock)
             print("previousSales", previousSales)
-            print("totalwight", totalWeightSold)
+            print("totalweight", totalWeightSold)
             print("Totalbag", totalBagsUsed)
 
-            // View current stock.
+            // Owner add stock.
         } else if option == option2 {
-            print("Current Stock: \(currentStock)")
+            let numberAdded = ownerAddKumara(currentStock: currentStock)
+            currentStock += numberAdded
+            print("You now have \(currentStock)kg of kumara in stock.")
+            
+            // View current stock.
+        } else if option == option3 {
+            print("Current Stock: \(currentStock)kg")
 
             // View previous sales.
-        } else if option == option3 {
+        } else if option == option4 {
             print("Previous Sales: \(previousSales)")
             for sale in previousSales {
-                var saleNumber = 0
+                var index = 0
+                let number = index + 1
+                
+                while index <= number {
+                index += 1
                 print("""
-                \(String(saleNumber += 1)). \(sale)Kg
+                Sale \(index) : \(sale)Kg
                 """)
+                
+                }
+                index += 1
+
             }
 
             // View summary.
-        } else if option == option4 {
+        } else if option == option5 {
             print("""
             Today the total bags used were: \(totalBagsUsed)
             You sold: \(totalWeightSold)kg of Kumara
@@ -168,7 +186,7 @@ struct SwiftPlayground {
             """)
 
             // Close program.
-        } else if option == option5 {
+        } else if option == option6 {
             programRunning = false
         }
         }
